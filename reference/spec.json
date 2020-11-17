@@ -74,6 +74,23 @@
                 },
                 "type": "object"
             },
+            "PrizeType": {
+                "required": [
+                    "name",
+                    "title"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "/**\nID",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Название",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "required": [
                     "email",
