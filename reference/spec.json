@@ -1,87 +1,124 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-    "title": "My first API",
-    "contact": {
-      "email": "support@example.com"
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My first API",
+        "contact": {
+            "email": "support@example.com"
+        },
+        "version": "1.0.0"
     },
-    "version": "1.0.0"
-  },
-  "paths": {
-    "/test/{test}": {
-      "get": {
-        "tags": [
-          "Тестовая группа"
-        ],
-        "summary": "test route",
-        "operationId": "App\\Controller\\RegistrationController::test",
-        "parameters": [
-          {
-            "parameter": "test",
-            "name": "test",
-            "in": "path",
-            "required": true,
-            "example": "123"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list with products"
-          },
-          "default": {
-            "description": "an \"unexpected\" error"
-          }
-        },
-        "description": ""
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "User": {
-        "required": [
-          "email"
-        ],
-        "properties": {
-          "id": {
-            "description": "ID",
-            "type": "integer"
-          },
-          "email": {
-            "description": "Email",
-            "type": "string"
-          },
-          "roles": {
-            "description": "array of strings",
-            "type": "array",
-            "items": {
-              "type": "string"
+    "paths": {
+        "/test/{test}": {
+            "get": {
+                "tags": [
+                    "Тестовая группа"
+                ],
+                "summary": "test route",
+                "operationId": "App\\Controller\\RegistrationController::test",
+                "parameters": [
+                    {
+                        "parameter": "test",
+                        "name": "test",
+                        "in": "path",
+                        "required": true,
+                        "example": "123"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list with products"
+                    },
+                    "default": {
+                        "description": "an \"unexpected\" error"
+                    }
+                }
             }
-          },
-          "password": {
-            "description": "Password",
-            "type": "string"
-          },
-          "attempts": {
-            "description": "Попытки входа",
-            "type": "integer"
-          },
-          "blockDate": {
-            "description": "Дата блокировки",
-            "type": "string",
-            "format": "date-time"
-          },
-          "isRegistered": {
-            "description": "Полностью зарегистрирован",
-            "type": "boolean"
-          },
-          "isEnabled": {
-            "description": "Доступность",
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Prize": {
+                "required": [
+                    "title"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Название",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PrizeGroup": {
+                "required": [
+                    "name",
+                    "title"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Название",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "Внутреннее наименование",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "required": [
+                    "email",
+                    "title"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer"
+                    },
+                    "email": {
+                        "description": "Email",
+                        "type": "string"
+                    },
+                    "roles": {
+                        "description": "array of strings",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "password": {
+                        "description": "Password",
+                        "type": "string"
+                    },
+                    "attempts": {
+                        "description": "Попытки входа",
+                        "type": "integer"
+                    },
+                    "blockDate": {
+                        "description": "Дата блокировки",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "isRegistered": {
+                        "description": "Полностью зарегистрирован",
+                        "type": "boolean"
+                    },
+                    "isEnabled": {
+                        "description": "Доступность",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            }
+        }
     }
-  }
 }
