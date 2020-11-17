@@ -1,9 +1,9 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My first API",
+        "title": "СберСпасибо | Призолов",
         "contact": {
-            "email": "support@example.com"
+            "email": "sajvv@hismith.ru"
         },
         "version": "1.0.0"
     },
@@ -17,7 +17,6 @@
                 "operationId": "App\\Controller\\RegistrationController::test",
                 "parameters": [
                     {
-                        "parameter": "test",
                         "name": "test",
                         "in": "path",
                         "required": true,
@@ -91,10 +90,76 @@
                 },
                 "type": "object"
             },
+            "Task": {
+                "required": [
+                    "title",
+                    "openTopic",
+                    "openMessage",
+                    "closeTopic",
+                    "closeMessage",
+                    "prize",
+                    "position"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer"
+                    },
+                    "title": {
+                        "description": "Краткое название",
+                        "type": "string"
+                    },
+                    "openTopic": {
+                        "description": "Полный заголовок",
+                        "type": "string"
+                    },
+                    "openMessage": {
+                        "description": "Описание",
+                        "type": "string"
+                    },
+                    "closeTopic": {
+                        "description": "Заголовок при закрытии",
+                        "type": "string"
+                    },
+                    "closeMessage": {
+                        "description": "Описание при закрытии",
+                        "type": "string"
+                    },
+                    "position": {
+                        "description": "Сортировка",
+                        "type": "integer"
+                    },
+                    "prize": {
+                        "description": "Приз за выполнение (id)",
+                        "type": "integer"
+                    },
+                    "image": {
+                        "description": "Изображение",
+                        "properties": {
+                            "name": {
+                                "description": "название файла",
+                                "type": "string"
+                            },
+                            "path": {
+                                "description": "путь до файла",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "required": [
                     "email",
-                    "title"
+                    "title",
+                    "account",
+                    "attempts",
+                    "blockDate",
+                    "isRegistered",
+                    "isEnabled",
+                    "roles"
                 ],
                 "properties": {
                     "id": {
@@ -132,6 +197,55 @@
                     "isEnabled": {
                         "description": "Доступность",
                         "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
+            "UserDataLog": {
+                "required": [
+                    "id",
+                    "dateCreated",
+                    "type",
+                    "user",
+                    "userIp",
+                    "oldData",
+                    "newData"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer"
+                    },
+                    "dateCreated": {
+                        "description": "Дата и время события",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "type": {
+                        "description": "Тип",
+                        "type": "string",
+                        "enum": [
+                            "created",
+                            "updated"
+                        ]
+                    },
+                    "userIp": {
+                        "description": "IP пользователя",
+                        "type": "string"
+                    },
+                    "oldData": {
+                        "description": "Изначальные данные",
+                        "type": "array",
+                        "items": {
+                            "description": "любой формат json"
+                        }
+                    },
+                    "newData": {
+                        "description": "Новые данные",
+                        "type": "array",
+                        "items": {
+                            "description": "любой формат json"
+                        }
                     }
                 },
                 "type": "object"
