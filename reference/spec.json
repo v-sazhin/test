@@ -8,27 +8,38 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/test/{test}": {
+        "/register": {
             "get": {
                 "tags": [
-                    "Тестовая группа"
+                    "Авторизация / Регистрация"
                 ],
-                "summary": "test route",
-                "operationId": "App\\Controller\\RegistrationController::test",
+                "summary": "Регистрация нового пользователя",
+                "operationId": "App\\Controller\\RegistrationController::register",
                 "parameters": [
                     {
-                        "name": "test",
-                        "in": "path",
+                        "name": "birthdate",
+                        "in": "query",
+                        "description": "Дата рождения, формат dd-mm-YYYY",
                         "required": true,
-                        "example": "123"
+                        "example": "15-12-1989"
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "телефон, 10 символов",
+                        "required": true,
+                        "example": "9129678663"
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "A list with products"
+                    "400": {
+                        "description": "Есть ошибки валидации"
                     },
-                    "default": {
-                        "description": "an \"unexpected\" error"
+                    "500": {
+                        "description": "Ошибка при сохранении, данные не сохранены"
+                    },
+                    "200": {
+                        "description": "OK"
                     }
                 }
             }
@@ -176,14 +187,22 @@
                         "type": "string"
                     },
                     "roles": {
-                        "description": "array of strings",
+                        "description": "Массив с названием ролей",
                         "type": "array",
                         "items": {
                             "type": "string"
                         }
                     },
                     "password": {
-                        "description": "Password",
+                        "description": "Пароль (захэшированный)",
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "Название",
+                        "type": "string"
+                    },
+                    "accessCode": {
+                        "description": "Код доступа",
                         "type": "string"
                     },
                     "attempts": {
@@ -202,6 +221,10 @@
                     "isEnabled": {
                         "description": "Доступность",
                         "type": "boolean"
+                    },
+                    "account": {
+                        "description": "Аккаунт (сущность Account)",
+                        "type": "integer"
                     }
                 },
                 "type": "object"
