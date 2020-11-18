@@ -9,11 +9,12 @@
     },
     "paths": {
         "/register": {
-            "get": {
+            "post": {
                 "tags": [
                     "Авторизация / Регистрация"
                 ],
                 "summary": "Регистрация нового пользователя",
+                "description": "Регистрация пользователя",
                 "operationId": "App\\Controller\\RegistrationController::register",
                 "parameters": [
                     {
@@ -33,13 +34,20 @@
                 ],
                 "responses": {
                     "400": {
-                        "description": "Есть ошибки валидации"
+                        "description": "Есть ошибки валидации",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
                     },
                     "500": {
                         "description": "Ошибка при сохранении, данные не сохранены"
                     },
                     "200": {
-                        "description": "OK"
+                        "description": "Ответа нет, код 200."
                     }
                 }
             }
@@ -47,6 +55,32 @@
     },
     "components": {
         "schemas": {
+            "ValidationError": {
+                "required": [
+                    "code",
+                    "message"
+                ],
+                "properties": {
+                    "error": {
+                        "type": "boolean"
+                    },
+                    "errors": {
+                        "description": "Массив с ошибками валидации",
+                        "properties": {
+                            "FIELD_NAME": {
+                                "description": "Название поля (name)",
+                                "type": "array",
+                                "items": {
+                                    "description": "Текст ошибки",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "Prize": {
                 "title": "Приз",
                 "required": [
@@ -94,7 +128,7 @@
                 ],
                 "properties": {
                     "id": {
-                        "description": "/**\nID",
+                        "description": "ID",
                         "type": "integer"
                     },
                     "title": {
