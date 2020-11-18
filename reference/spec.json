@@ -67,6 +67,43 @@
                     }
                 }
             }
+        },
+        "/auth": {
+            "post": {
+                "tags": [
+                    "Авторизация / Регистрация"
+                ],
+                "summary": "Авторизация по email",
+                "description": "Авторизация пользователя",
+                "operationId": "App\\Controller\\SecurityController::auth",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "email",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Пользователь не найден"
+                    },
+                    "200": {
+                        "description": "Успешный вход. Ответа нет, код 200."
+                    }
+                }
+            }
         }
     },
     "components": {
