@@ -44,7 +44,14 @@
                         }
                     },
                     "500": {
-                        "description": "Ошибка при сохранении, данные не сохранены"
+                        "description": "Ошибка при сохранении, данные не сохранены",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BackendError"
+                                }
+                            }
+                        }
                     },
                     "200": {
                         "description": "Ответа нет, код 200."
@@ -77,6 +84,26 @@
                             }
                         },
                         "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "BackendError": {
+                "required": [
+                    "error",
+                    "errors"
+                ],
+                "properties": {
+                    "error": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "description": "Текст ошибки",
+                        "type": "string"
+                    },
+                    "code": {
+                        "description": "Код исключения",
+                        "type": "boolean"
                     }
                 },
                 "type": "object"
