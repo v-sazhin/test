@@ -54,271 +54,36 @@
           }
         }
       }
+    },
+    "/auth" : {
+      "post" : {
+        "tags" : [ "Авторизация / Регистрация" ],
+        "summary" : "Авторизация по email",
+        "description" : "Авторизация пользователя",
+        "operationId" : "App\\Controller\\SecurityController::auth",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/body_1"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Успешный вход. Ответа нет, код 200."
+          },
+          "404" : {
+            "description" : "Пользователь не найден"
+          }
+        }
+      }
     }
   },
   "components" : {
     "schemas" : {
-      "ValidationError" : {
-        "required" : [ "error", "errors" ],
-        "type" : "object",
-        "properties" : {
-          "error" : {
-            "type" : "boolean"
-          },
-          "errors" : {
-            "$ref" : "#/components/schemas/ValidationError_errors"
-          }
-        }
-      },
-      "BackendError" : {
-        "required" : [ "code", "error", "message" ],
-        "type" : "object",
-        "properties" : {
-          "error" : {
-            "type" : "boolean"
-          },
-          "message" : {
-            "type" : "string",
-            "description" : "Текст ошибки"
-          },
-          "code" : {
-            "type" : "integer",
-            "description" : "Код исключения"
-          }
-        }
-      },
-      "Prize" : {
-        "title" : "Приз",
-        "required" : [ "title" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "ID"
-          },
-          "title" : {
-            "type" : "string",
-            "description" : "Название"
-          }
-        }
-      },
-      "PrizeGroup" : {
-        "title" : "Группы призов",
-        "required" : [ "name", "title" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "ID"
-          },
-          "title" : {
-            "type" : "string",
-            "description" : "Название"
-          },
-          "name" : {
-            "type" : "string",
-            "description" : "Внутреннее наименование"
-          }
-        }
-      },
-      "PrizeType" : {
-        "title" : "Типы призов",
-        "required" : [ "name", "title" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "ID"
-          },
-          "title" : {
-            "type" : "string",
-            "description" : "Название"
-          }
-        }
-      },
-      "Task" : {
-        "title" : "Задание",
-        "required" : [ "closeMessage", "closeTopic", "openMessage", "openTopic", "position", "prize", "title" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "ID"
-          },
-          "title" : {
-            "type" : "string",
-            "description" : "Краткое название"
-          },
-          "openTopic" : {
-            "type" : "string",
-            "description" : "Полный заголовок"
-          },
-          "openMessage" : {
-            "type" : "string",
-            "description" : "Описание"
-          },
-          "closeTopic" : {
-            "type" : "string",
-            "description" : "Заголовок при закрытии"
-          },
-          "closeMessage" : {
-            "type" : "string",
-            "description" : "Описание при закрытии"
-          },
-          "position" : {
-            "type" : "integer",
-            "description" : "Сортировка"
-          },
-          "prize" : {
-            "type" : "integer",
-            "description" : "Приз за выполнение (id)"
-          },
-          "image" : {
-            "$ref" : "#/components/schemas/Task_image"
-          }
-        }
-      },
-      "User" : {
-        "title" : "Пользователь",
-        "required" : [ "account", "attempts", "blockDate", "email", "isEnabled", "isRegistered", "roles", "title" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "ID"
-          },
-          "email" : {
-            "type" : "string",
-            "description" : "Email"
-          },
-          "roles" : {
-            "type" : "array",
-            "description" : "Массив с названием ролей",
-            "items" : {
-              "type" : "string"
-            }
-          },
-          "password" : {
-            "type" : "string",
-            "description" : "Пароль (захэшированный)"
-          },
-          "title" : {
-            "type" : "string",
-            "description" : "Название"
-          },
-          "accessCode" : {
-            "type" : "string",
-            "description" : "Код доступа"
-          },
-          "attempts" : {
-            "type" : "integer",
-            "description" : "Попытки входа"
-          },
-          "blockDate" : {
-            "type" : "string",
-            "description" : "Дата блокировки",
-            "format" : "date-time"
-          },
-          "isRegistered" : {
-            "type" : "boolean",
-            "description" : "Полностью зарегистрирован"
-          },
-          "isEnabled" : {
-            "type" : "boolean",
-            "description" : "Доступность"
-          },
-          "account" : {
-            "type" : "integer",
-            "description" : "Аккаунт (сущность Account)"
-          }
-        }
-      },
-      "UserDataLog" : {
-        "title" : "Аккаунтский лог",
-        "required" : [ "dateCreated", "id", "newData", "oldData", "type", "user", "userIp" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "ID"
-          },
-          "dateCreated" : {
-            "type" : "string",
-            "description" : "Дата и время события",
-            "format" : "date-time"
-          },
-          "type" : {
-            "type" : "string",
-            "description" : "Тип",
-            "enum" : [ "created", "updated" ]
-          },
-          "userIp" : {
-            "type" : "string",
-            "description" : "IP пользователя"
-          },
-          "oldData" : {
-            "type" : "array",
-            "description" : "Изначальные данные",
-            "items" : {
-              "description" : "любой формат json"
-            }
-          },
-          "newData" : {
-            "type" : "array",
-            "description" : "Новые данные",
-            "items" : {
-              "description" : "любой формат json"
-            }
-          }
-        }
-      },
-      "UserTask" : {
-        "title" : "Пользовательские задания",
-        "required" : [ "account", "dateCreated", "dateFinish", "dateStart", "id", "isCompleted", "isViewed", "newData", "task" ],
-        "type" : "object",
-        "properties" : {
-          "id" : {
-            "type" : "integer",
-            "description" : "ID"
-          },
-          "task" : {
-            "type" : "integer",
-            "description" : "Задание (сущность Task)"
-          },
-          "account" : {
-            "type" : "integer",
-            "description" : "Аккаунт (сущность Account)"
-          },
-          "dateCreated" : {
-            "type" : "string",
-            "description" : "Дата и время создания",
-            "format" : "date-time"
-          },
-          "dateCompleted" : {
-            "type" : "string",
-            "description" : "Дата и время выполнения",
-            "format" : "date-time"
-          },
-          "dateStart" : {
-            "type" : "string",
-            "description" : "Дата начала задания",
-            "format" : "date-time"
-          },
-          "dateFinish" : {
-            "type" : "string",
-            "description" : "Дата окончания задания",
-            "format" : "date-time"
-          },
-          "isViewed" : {
-            "type" : "boolean",
-            "description" : "Просмотрено"
-          },
-          "isCompleted" : {
-            "type" : "boolean",
-            "description" : "Выполнено"
-          }
-        }
-      },
       "body" : {
         "required" : [ "birthdate", "phone" ],
         "type" : "object",
@@ -333,33 +98,15 @@
           }
         }
       },
-      "ValidationError_errors" : {
+      "body_1" : {
+        "required" : [ "email" ],
         "type" : "object",
         "properties" : {
-          "FIELD_NAME" : {
-            "type" : "array",
-            "description" : "Название поля (name)",
-            "items" : {
-              "type" : "string",
-              "description" : "Текст ошибки"
-            }
-          }
-        },
-        "description" : "Массив с ошибками валидации"
-      },
-      "Task_image" : {
-        "type" : "object",
-        "properties" : {
-          "name" : {
+          "email" : {
             "type" : "string",
-            "description" : "название файла"
-          },
-          "path" : {
-            "type" : "string",
-            "description" : "путь до файла"
+            "description" : "email"
           }
-        },
-        "description" : "Изображение"
+        }
       }
     }
   }

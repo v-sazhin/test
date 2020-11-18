@@ -27,5 +27,6 @@ namespace IO.Swagger.Controllers
     [ApiController]
     public class _ApiController : ControllerBase
     { 
+
     }
 }
