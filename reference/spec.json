@@ -16,22 +16,30 @@
                 "summary": "Регистрация нового пользователя",
                 "description": "Регистрация пользователя",
                 "operationId": "App\\Controller\\RegistrationController::register",
-                "parameters": [
-                    {
-                        "name": "birthdate",
-                        "in": "query",
-                        "description": "Дата рождения, формат dd-mm-YYYY",
-                        "required": true,
-                        "example": "15-12-1989"
-                    },
-                    {
-                        "name": "phone",
-                        "in": "query",
-                        "description": "телефон, 10 символов",
-                        "required": true,
-                        "example": "9129678663"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "birthdate",
+                                    "phone"
+                                ],
+                                "properties": {
+                                    "birthdate": {
+                                        "description": "Дата рождения, формат dd-mm-YYYY",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон, 10 символов",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
                     }
-                ],
+                },
                 "responses": {
                     "400": {
                         "description": "Есть ошибки валидации",
@@ -54,7 +62,7 @@
                         }
                     },
                     "200": {
-                        "description": "Ответа нет, код 200."
+                        "description": "Успешно сохранено. Ответа нет, код 200."
                     }
                 }
             }
