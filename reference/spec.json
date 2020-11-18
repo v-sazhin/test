@@ -249,6 +249,62 @@
                     }
                 },
                 "type": "object"
+            },
+            "UserTask": {
+                "required": [
+                    "id",
+                    "task",
+                    "account",
+                    "dateCreated",
+                    "dateStart",
+                    "dateFinish",
+                    "newData",
+                    "isViewed",
+                    "isCompleted"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer"
+                    },
+                    "task": {
+                        "description": "Задание (сущность Task)",
+                        "type": "integer"
+                    },
+                    "account": {
+                        "description": "Аккаунт (сущность Account)",
+                        "type": "integer"
+                    },
+                    "dateCreated": {
+                        "description": "Дата и время создания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "dateCompleted": {
+                        "description": "Дата и время выполнения",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "dateStart": {
+                        "description": "Дата начала задания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "dateFinish": {
+                        "description": "Дата окончания задания",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "isViewed": {
+                        "description": "Просмотрено",
+                        "type": "boolean"
+                    },
+                    "isCompleted": {
+                        "description": "Выполнено",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
             }
         }
     }
