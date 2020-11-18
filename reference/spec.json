@@ -103,7 +103,7 @@
                     },
                     "code": {
                         "description": "Код исключения",
-                        "type": "boolean"
+                        "type": "integer"
                     }
                 },
                 "type": "object"
