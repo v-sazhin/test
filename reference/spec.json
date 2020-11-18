@@ -37,6 +37,7 @@
     "components": {
         "schemas": {
             "Prize": {
+                "title": "Приз",
                 "required": [
                     "title"
                 ],
@@ -53,6 +54,7 @@
                 "type": "object"
             },
             "PrizeGroup": {
+                "title": "Группы призов",
                 "required": [
                     "name",
                     "title"
@@ -74,6 +76,7 @@
                 "type": "object"
             },
             "PrizeType": {
+                "title": "Типы призов",
                 "required": [
                     "name",
                     "title"
@@ -91,6 +94,7 @@
                 "type": "object"
             },
             "Task": {
+                "title": "Задание",
                 "required": [
                     "title",
                     "openTopic",
@@ -151,6 +155,7 @@
                 "type": "object"
             },
             "User": {
+                "title": "Пользователь",
                 "required": [
                     "email",
                     "title",
@@ -202,6 +207,7 @@
                 "type": "object"
             },
             "UserDataLog": {
+                "title": "Аккаунтский лог",
                 "required": [
                     "id",
                     "dateCreated",
@@ -251,6 +257,7 @@
                 "type": "object"
             },
             "UserTask": {
+                "title": "Пользовательские задания",
                 "required": [
                     "id",
                     "task",
