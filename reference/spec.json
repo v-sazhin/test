@@ -57,8 +57,8 @@
         "schemas": {
             "ValidationError": {
                 "required": [
-                    "code",
-                    "message"
+                    "error",
+                    "errors"
                 ],
                 "properties": {
                     "error": {
