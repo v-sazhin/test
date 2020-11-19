@@ -10,8 +10,8 @@ paths:
     post:
       tags:
         - Игра
-      summary: 'Снямает демо режим с пользователя'
-      description: 'Снятие демо режима'
+      summary: 'Снятие демо режима'
+      description: 'Снямает демо режим с пользователя. Без параметров.'
       operationId: 'App\Controller\Game\GameController::removeDemo'
       responses:
         '404':
