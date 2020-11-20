@@ -14,10 +14,22 @@ paths:
       description: 'Снямает демо режим с пользователя. Без параметров.'
       operationId: 'App\Controller\Game\GameController::removeDemo'
       responses:
-        '404':
-          description: 'Пользователь не найден'
         '200':
           description: 'Успешное снятие. Ответа нет, код 200.'
+  /game/user/info:
+    post:
+      tags:
+        - Игра
+      summary: 'Информация о текущем пользователе'
+      description: 'Отображает список доступных локаций, ходов и демо режим'
+      operationId: 'App\Controller\Game\GameController::userInfo'
+      responses:
+        '200':
+          description: 'Информация о текущем пользователе'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
   /register:
     post:
       tags:
@@ -114,6 +126,32 @@ components:
         code:
           description: 'Код исключения'
           type: integer
+      type: object
+    UserInfo:
+      required:
+        - id
+        - message
+        - code
+      properties:
+        id:
+          description: 'ID текущего пользователя'
+          type: integer
+        shots_available:
+          description: 'Количество доступных ходов'
+          type: integer
+        isDemo:
+          description: 'Флаг демо пользователя'
+          type: boolean
+        locations:
+          description: 'Массив с ошибками валидации'
+          properties:
+            LOCATION_ID:
+              description: 'ИД локации'
+              type: array
+              items:
+                description: 'Доступность локации'
+                type: boolean
+          type: object
       type: object
     Prize:
       title: Приз
