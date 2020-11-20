@@ -30,6 +30,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
+  /game/user/prizes:
+    post:
+      tags:
+        - Игра
+      summary: 'Список призов'
+      description: 'Список всех призов'
+      operationId: 'App\Controller\Game\GameController::getPrizeList'
+      responses:
+        '200':
+          description: 'Список призов, включая выигранные.'
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Prize'
   /game/location/info:
     post:
       tags:
@@ -182,10 +197,7 @@ components:
           properties:
             LOCATION_ID:
               description: 'ИД локации'
-              type: array
-              items:
-                description: 'Доступность локации'
-                type: boolean
+              type: boolean
           type: object
       type: object
     LocationInfo:
@@ -240,9 +252,8 @@ components:
       type: object
     ShotResponseError:
       required:
-        - info
-        - shots
-        - completed
+        - success
+        - errors
       properties:
         success:
           description: 'Статус успешности (false)'
@@ -258,6 +269,16 @@ components:
                 description: 'Текст ошибки (Клетка уже открыта. / Недостаточное количество ходов.)'
                 type: string
             type: object
+      type: object
+    PrizeListResponse:
+      required:
+        - success
+        - errors
+      properties:
+        '':
+          description: 'Статус успешности (false)'
+          items:
+            $ref: '#/components/schemas/Prize'
       type: object
     Shot:
       title: 'Ход игрока'
@@ -305,6 +326,9 @@ components:
         title:
           description: Название
           type: string
+        isWon:
+          description: 'Выиграл ли текущий юзер этот приз'
+          type: boolean
       type: object
     PrizeGroup:
       title: 'Группы призов'
