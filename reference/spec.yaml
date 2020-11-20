@@ -30,6 +30,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInfo'
+  /game/location/info:
+    post:
+      tags:
+        - Игра
+      summary: 'Информация о локации для пользователя'
+      description: 'Информация о локации для пользователя'
+      operationId: 'App\Controller\Game\LocationController::info'
+      responses:
+        '200':
+          description: 'Информация о локации для пользователя'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationInfo'
   /register:
     post:
       tags:
@@ -130,8 +144,9 @@ components:
     UserInfo:
       required:
         - id
-        - message
-        - code
+        - shots_available
+        - isDemo
+        - locations
       properties:
         id:
           description: 'ID текущего пользователя'
@@ -152,6 +167,36 @@ components:
                 description: 'Доступность локации'
                 type: boolean
           type: object
+      type: object
+    LocationInfo:
+      required:
+        - id
+        - shots_available
+        - isDemo
+        - locations
+      properties:
+        info:
+          description: 'Информация о локации'
+          properties:
+            index:
+              description: 'ID локации'
+              type: string
+            titles:
+              description: 'Название локации'
+              type: string
+            cells:
+              description: 'Количество клеток в локации'
+              type: string
+          type: object
+        completed:
+          description: 'Флаг пройденности локации'
+          type: boolean
+        shots:
+          description: 'Массив с ошибками валидации'
+          type: array
+          items:
+            description: 'Доступность локации'
+            type: boolean
       type: object
     Prize:
       title: Приз
