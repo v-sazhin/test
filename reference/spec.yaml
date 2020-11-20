@@ -204,7 +204,7 @@ components:
                   userIndex: { description: 'Сквозной номер хода по ходам пользователя', type: string }
                   location: { description: 'Ид локации', type: integer }
                   cell: { description: 'Номер клетки', type: integer }
-                  date: { description: 'Время хода. Формат 2020-11-20T12:15:44+03:00', type: datetime }
+                  date: { description: 'Время хода. Формат 2020-11-20T12:15:44+03:00', type: string }
                   shots: { description: 'Массив с ходами и результатами в локации', type: array, items: { properties: { shots: { description: 'Массив с ходами и результатами в локации', properties: { id: { description: 'ID выигранного приза', type: integer }, title: { description: 'Название приза', type: string } }, type: object } }, type: object } }
                 type: object
             type: object
