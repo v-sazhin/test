@@ -195,8 +195,15 @@ components:
           description: 'Массив с ошибками валидации'
           type: array
           items:
-            description: 'Доступность локации'
-            type: boolean
+            properties:
+              shots:
+                description: 'Массив с ошибками валидации'
+                properties:
+                  index: { description: 'ID локации', type: string }
+                  titles: { description: 'Название локации', type: string }
+                  cells: { description: 'Количество клеток в локации', type: string }
+                type: object
+            type: object
       type: object
     Prize:
       title: Приз
