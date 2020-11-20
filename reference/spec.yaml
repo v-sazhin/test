@@ -44,6 +44,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LocationInfo'
+  /game/shot:
+    post:
+      tags:
+        - Игра
+      summary: 'Открытие клетки'
+      description: 'Ход по локации'
+      operationId: 'App\Controller\Game\ShotsController::shot'
+      responses:
+        '200':
+          description: 'Результат хода. Когда приза нет, то массив result пуст.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShotResponseSuccess'
+        '403':
+          description: 'Результат хода ошибкой.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShotResponseError'
   /register:
     post:
       tags:
@@ -170,10 +190,9 @@ components:
       type: object
     LocationInfo:
       required:
-        - id
-        - shots_available
-        - isDemo
-        - locations
+        - info
+        - shots
+        - completed
       properties:
         info:
           description: 'Информация о локации'
@@ -188,26 +207,92 @@ components:
               description: 'Количество клеток в локации'
               type: string
           type: object
-        completed:
-          description: 'Флаг пройденности локации'
-          type: boolean
         shots:
           description: 'Массив с ходами и результатами в локации'
           type: array
           items:
+            $ref: '#/components/schemas/Shot'
+        completed:
+          description: 'Флаг пройденности локации'
+          type: boolean
+      type: object
+    ShotResponseSuccess:
+      required:
+        - success
+        - result
+        - shots
+      properties:
+        success:
+          description: 'Статус успешности (true)'
+          type: boolean
+        result:
+          $ref: '#/components/schemas/Prize'
+        shots:
+          description: 'Информация по ходам пользователя'
+          properties:
+            used:
+              description: 'Количество использованных ходов'
+              type: string
+            available:
+              description: 'Количество доступных ходов'
+              type: string
+          type: object
+      type: object
+    ShotResponseError:
+      required:
+        - info
+        - shots
+        - completed
+      properties:
+        success:
+          description: 'Статус успешности (false)'
+          type: boolean
+        errors:
+          type: array
+          items:
             properties:
-              shots:
-                description: 'Массив с ходами и результатами в локации'
-                properties:
-                  id: { description: 'ID хода', type: integer }
-                  allIndex: { description: 'Сквозной номер хода по всем ходам', type: string }
-                  userIndex: { description: 'Сквозной номер хода по ходам пользователя', type: string }
-                  location: { description: 'Ид локации', type: integer }
-                  cell: { description: 'Номер клетки', type: integer }
-                  date: { description: 'Время хода. Формат 2020-11-20T12:15:44+03:00', type: string }
-                  shots: { description: 'Массив с ходами и результатами в локации', type: array, items: { properties: { shots: { description: 'Массив с ходами и результатами в локации', properties: { id: { description: 'ID выигранного приза', type: integer }, title: { description: 'Название приза', type: string } }, type: object } }, type: object } }
-                type: object
+              field:
+                description: 'Тип ошибки (cell / shots)'
+                type: string
+              message:
+                description: 'Текст ошибки (Клетка уже открыта. / Недостаточное количество ходов.)'
+                type: string
             type: object
+      type: object
+    Shot:
+      title: 'Ход игрока'
+      required:
+        - id
+        - allIndex
+        - userIndex
+        - location
+        - cell
+        - date
+        - result
+      properties:
+        id:
+          description: ID
+          type: integer
+        allIndex:
+          description: 'Сквозной номер хода'
+          type: integer
+        userIndex:
+          description: 'Номер хода по счетчику игрока'
+          type: integer
+        location:
+          description: 'Ид локации, в которой совершен ход'
+          type: integer
+        cell:
+          description: 'Номер клетки'
+          type: integer
+        date:
+          description: 'Дата и время хода'
+          type: string
+        result:
+          description: 'Результат хода'
+          type: array
+          items:
+            $ref: '#/components/schemas/Prize'
       type: object
     Prize:
       title: Приз
@@ -343,6 +428,12 @@ components:
           type: boolean
         account:
           description: 'Аккаунт (сущность Account)'
+          type: integer
+        shots_available:
+          description: 'Количество доступных ходов'
+          type: integer
+        shots_used:
+          description: 'Количество использованных ходов'
           type: integer
       type: object
     UserDataLog:
