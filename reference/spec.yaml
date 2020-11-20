@@ -192,16 +192,20 @@ components:
           description: 'Флаг пройденности локации'
           type: boolean
         shots:
-          description: 'Массив с ошибками валидации'
+          description: 'Массив с ходами и результатами в локации'
           type: array
           items:
             properties:
               shots:
-                description: 'Массив с ошибками валидации'
+                description: 'Массив с ходами и результатами в локации'
                 properties:
-                  index: { description: 'ID локации', type: string }
-                  titles: { description: 'Название локации', type: string }
-                  cells: { description: 'Количество клеток в локации', type: string }
+                  id: { description: 'ID хода', type: integer }
+                  allIndex: { description: 'Сквозной номер хода по всем ходам', type: string }
+                  userIndex: { description: 'Сквозной номер хода по ходам пользователя', type: string }
+                  location: { description: 'Ид локации', type: integer }
+                  cell: { description: 'Номер клетки', type: integer }
+                  date: { description: 'Время хода. Формат 2020-11-20T12:15:44+03:00', type: datetime }
+                  shots: { description: 'Массив с ходами и результатами в локации', type: array, items: { properties: { shots: { description: 'Массив с ходами и результатами в локации', properties: { id: { description: 'ID выигранного приза', type: integer }, title: { description: 'Название приза', type: string } }, type: object } }, type: object } }
                 type: object
             type: object
       type: object
