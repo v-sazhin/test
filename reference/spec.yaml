@@ -171,6 +171,7 @@ paths:
             schema:
               required:
                 - phone
+                - birthdate
               properties:
                 phone:
                   description: phone
