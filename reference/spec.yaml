@@ -161,8 +161,8 @@ paths:
     post:
       tags:
         - 'Авторизация / Регистрация'
-      summary: 'Авторизация по номеру телефона'
-      description: 'Авторизация пользователя'
+      summary: 'Авторизация пользователя'
+      description: 'Авторизация по номеру телефона и дате рождения'
       operationId: 'App\Controller\SecurityController::auth'
       requestBody:
         required: true
