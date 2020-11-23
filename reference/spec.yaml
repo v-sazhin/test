@@ -170,10 +170,13 @@ paths:
           multipart/form-data:
             schema:
               required:
-                - email
+                - phone
               properties:
                 phone:
                   description: phone
+                  type: string
+                birthdate:
+                  description: 'Дата рождения, формат DD-MM-YYYY (21-12-2020)'
                   type: string
               type: object
       responses:
@@ -181,6 +184,12 @@ paths:
           description: 'Пользователь не найден'
         '200':
           description: 'Успешный вход. Ответа нет, код 200.'
+        '400':
+          description: 'Ошибка валидации (некорректный формат даты рождения). Сообщение Некорректно указана дата рождения., field = birthdate'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ByShotsFailResponse'
 components:
   schemas:
     ValidationError:
