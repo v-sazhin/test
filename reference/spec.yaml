@@ -79,6 +79,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShotResponseError'
+  /game/shots/price:
+    get:
+      tags:
+        - 'Покупка ходов'
+      summary: 'Прайс на покупку ходов'
+      description: 'Прайс на покупку ходов'
+      operationId: 'App\Controller\Game\ShotsController::getShotPrice'
+      responses:
+        '200':
+          description: 'Прайс на покупку ходов'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+  /game/shots/by:
+    post:
+      tags:
+        - 'Покупка ходов'
+      summary: 'Купить ходы'
+      description: 'Покупка хода'
+      operationId: 'App\Controller\Game\ShotsController::byShots'
+      responses:
+        '500':
+          description: 'Ошибка при покупке, данные не сохранены'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackendError'
+        '400':
+          description: 'Ошибка покупки'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ByShotsFailResponse'
+        '200':
+          description: 'Успешная покупка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ByShotsSuccessResponse'
   /register:
     post:
       tags:
@@ -270,15 +310,53 @@ components:
                 type: string
             type: object
       type: object
-    PrizeListResponse:
+    PriceResponse:
+      required:
+        - price
+      properties:
+        price:
+          description: 'Цена в бонусах за 1 ход'
+          type: integer
+      type: object
+    ByShotsResponse:
+      required:
+        - success
+      properties:
+        success:
+          description: 'Статус успешности (false)'
+          type: boolean
+      type: object
+    ByShotsFailResponse:
       required:
         - success
         - errors
       properties:
-        '':
+        success:
           description: 'Статус успешности (false)'
+          type: boolean
+        errors:
+          type: array
           items:
-            $ref: '#/components/schemas/Prize'
+            properties:
+              field:
+                description: 'Тип ошибки (count/balance)'
+                type: string
+              message:
+                description: 'Текст ошибки (Некорректно указано количество покупаемых ходов. / Недостаточно бонусов для списания.)'
+                type: string
+            type: object
+      type: object
+    ByShotsSuccessResponse:
+      required:
+        - success
+        - current_shots_count
+      properties:
+        success:
+          description: 'Статус успешности (true)'
+          type: boolean
+        current_shots_count:
+          description: 'Текущее количество доступных ходов (после покупки)'
+          type: integer
       type: object
     Shot:
       title: 'Ход игрока'
