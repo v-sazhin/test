@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: 'СберСпасибо | Призолов'
-  description: 'Все формы передаются в формате multipart/form-data, ответы от сервера приходят в виде json.'
+  description: 'Все формы передаются в формате multipart/form-data, ответы от сервера приходят в виде json. В каждом запросе необходимо передавать заголовок X-AUTH-TOKEN'
   contact:
     email: sajvv@hismith.ru
   version: 1.0.0
@@ -52,6 +52,18 @@ paths:
       summary: 'Информация о локации для пользователя'
       description: 'Информация о локации для пользователя'
       operationId: 'App\Controller\Game\LocationController::info'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - location
+              properties:
+                location:
+                  description: 'ID Локации'
+                  type: integer
+              type: object
       responses:
         '200':
           description: 'Информация о локации для пользователя'
@@ -66,6 +78,22 @@ paths:
       summary: 'Открытие клетки'
       description: 'Ход по локации'
       operationId: 'App\Controller\Game\ShotsController::shot'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - location
+                - cell
+              properties:
+                location:
+                  description: 'ID локации'
+                  type: integer
+                cell:
+                  description: 'Номер клетки'
+                  type: integer
+              type: object
       responses:
         '200':
           description: 'Результат хода. Когда приза нет, то массив result пуст.'
@@ -100,6 +128,18 @@ paths:
       summary: 'Купить ходы'
       description: 'Покупка хода'
       operationId: 'App\Controller\Game\ShotsController::byShots'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - count
+              properties:
+                count:
+                  description: 'Количество покупаемых ходов'
+                  type: integer
+              type: object
       responses:
         '500':
           description: 'Ошибка при покупке, данные не сохранены'
@@ -129,7 +169,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/x-www-form-urlencoded:
             schema:
               required:
                 - birthdate
@@ -167,7 +207,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/x-www-form-urlencoded:
             schema:
               required:
                 - phone
@@ -184,7 +224,11 @@ paths:
         '404':
           description: 'Пользователь не найден'
         '200':
-          description: 'Успешный вход. Ответа нет, код 200.'
+          description: 'Успешный вход. Токен необходимо передавать в дальнейших запросах к апи в хэдере X-AUTH-TOKEN'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
         '400':
           description: 'Ошибка валидации (некорректный формат даты рождения). Сообщение Некорректно указана дата рождения., field = birthdate'
           content:
@@ -210,6 +254,14 @@ components:
                 description: 'Текст ошибки'
                 type: string
           type: object
+      type: object
+    TokenResponse:
+      required:
+        - token
+      properties:
+        token:
+          description: 'Токен, который в дальнейшем нужно передавать в каждом запросе к апи.'
+          type: string
       type: object
     BackendError:
       required:
