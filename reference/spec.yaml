@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: 'СберСпасибо | Призолов'
-  description: 'Все формы передаются в формате multipart/form-data, ответы от сервера приходят в виде json. В каждом запросе необходимо передавать заголовок X-AUTH-TOKEN'
+  description: 'Все формы передаются в формате `application/x-www-form-urlencoded`, ответы от сервера приходят в виде json. В каждом запросе необходимо передавать заголовок X-AUTH-TOKEN'
   contact:
     email: sajvv@hismith.ru
   version: 1.0.0
