@@ -445,6 +445,8 @@ components:
       title: Приз
       required:
         - title
+        - type
+        - prize_group
       properties:
         id:
           description: ID
@@ -455,6 +457,10 @@ components:
         isWon:
           description: 'Выиграл ли текущий юзер этот приз'
           type: boolean
+        type:
+          $ref: '#/components/schemas/PrizeType'
+        prize_group:
+          $ref: '#/components/schemas/PrizeGroup'
       type: object
     PrizeGroup:
       title: 'Группы призов'
@@ -483,6 +489,9 @@ components:
           type: integer
         title:
           description: Название
+          type: string
+        name:
+          description: 'Внутреннее наименование'
           type: string
       type: object
     Task:
