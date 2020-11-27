@@ -1,131 +1,191 @@
 openapi: 3.0.0
 info:
-  title: 'Reviews API'
-  description: 'Ко всем запросам необходимо добавлять заголовк X-AUTH-TOKEN: токен, который можно получить в методе `Получить токен доступа к апи`.'
+  title: 'СберСпасибо | Призолов'
+  description: 'Все формы передаются в формате `application/x-www-form-urlencoded`, ответы от сервера приходят в виде json. В каждом запросе необходимо передавать заголовок X-AUTH-TOKEN'
+  contact:
+    email: sajvv@hismith.ru
   version: 1.0.0
 paths:
-  /api/reviews:
-    get:
+  /game/demo/remove:
+    post:
       tags:
-        - 'Гостевая книга'
-      summary: 'Список отзывов'
-      description: 'Список отзывов'
-      operationId: 'App\Controller\Api\ApiController::reviews'
-      parameters:
-        -
-          name: s
-          in: query
-          description: 'Сортировка по лайкам/дате создания отзыва (date/likes_count)'
-          required: false
-          schema:
-            type: string
-        -
-          name: o
-          in: query
-          description: 'Порядок сортировки (1: DESC / -1:asc)'
-          required: false
-          schema:
-            type: string
-        -
-          name: page
-          in: query
-          description: 'Номер запрашиваемой страницы'
-          required: false
-          schema:
-            type: integer
-        -
-          name: limit
-          in: query
-          description: 'Лимит записей на страницу'
-          required: false
-          schema:
-            type: integer
+        - Игра
+      summary: 'Снятие демо режима'
+      description: 'Снямает демо режим с пользователя. Без параметров.'
+      operationId: 'App\Controller\Game\GameController::removeDemo'
       responses:
         '200':
-          description: 'Список отзывов с параметрами'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ReviewsResponse'
-  '/api/review/{id}':
-    get:
+          description: 'Успешное снятие. Ответа нет, код 200.'
+  /game/user/info:
+    post:
       tags:
-        - 'Гостевая книга'
-      summary: 'Один отзыв'
-      description: 'Один отзыв'
-      operationId: 'App\Controller\Api\ApiController::review'
-      parameters:
-        -
-          name: id
-          in: path
-          description: 'ID отзыва'
-          required: true
-          schema:
-            type: integer
+        - Игра
+      summary: 'Информация о текущем пользователе'
+      description: 'Отображает список доступных локаций, ходов и демо режим'
+      operationId: 'App\Controller\Game\GameController::userInfo'
       responses:
         '200':
-          description: 'Объект отзыва'
+          description: 'Информация о текущем пользователе'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Review'
-        '404':
-          description: 'Отзыв не найден'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  '/review/{id}/like':
-    put:
+                $ref: '#/components/schemas/UserInfo'
+  /game/user/prizes:
+    post:
       tags:
-        - 'Гостевая книга'
-      summary: 'Поставить лайк'
-      description: 'Поставить лайк'
-      operationId: 'App\Controller\Api\ApiController::like'
-      parameters:
-        -
-          name: id
-          in: path
-          description: 'ID отзыва'
-          required: true
-          schema:
-            type: integer
+        - Игра
+      summary: 'Список призов'
+      description: 'Список всех призов'
+      operationId: 'App\Controller\Game\GameController::getPrizeList'
       responses:
         '200':
-          description: 'Успех. Без ответа, статус 200'
-        '404':
-          description: 'Отзыв не найден'
+          description: 'Список призов, включая выигранные.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: 'Вы уже ставили лайк за отзыв'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /api/review/create:
-    put:
+                items:
+                  $ref: '#/components/schemas/Prize'
+  /game/location/info:
+    post:
       tags:
-        - 'Гостевая книга'
-      summary: 'Добавить отзыв'
-      description: 'Добавить отзыв'
-      operationId: 'App\Controller\Api\ApiController::createReview'
+        - Игра
+      summary: 'Информация о локации для пользователя'
+      description: 'Информация о локации для пользователя'
+      operationId: 'App\Controller\Game\LocationController::info'
       requestBody:
         required: true
         content:
           application/x-www-form-urlencoded:
             schema:
               required:
-                - author
-                - content
+                - location
               properties:
-                author:
-                  description: Автор
+                location:
+                  description: 'ID Локации'
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: 'Информация о локации для пользователя'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationInfo'
+        '400':
+          description: 'Некорректный ID локации'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /game/shot:
+    post:
+      tags:
+        - Игра
+      summary: 'Открытие клетки'
+      description: 'Ход по локации'
+      operationId: 'App\Controller\Game\ShotsController::shot'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - location
+                - cell
+              properties:
+                location:
+                  description: 'ID локации'
+                  type: integer
+                cell:
+                  description: 'Номер клетки'
+                  type: integer
+              type: object
+      responses:
+        '200':
+          description: 'Результат хода. Когда приза нет, то массив result пуст.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShotResponseSuccess'
+        '403':
+          description: 'Результат хода ошибкой.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShotResponseError'
+  /game/shots/price:
+    get:
+      tags:
+        - 'Покупка ходов'
+      summary: 'Прайс на покупку ходов'
+      description: 'Прайс на покупку ходов'
+      operationId: 'App\Controller\Game\ShotsController::getShotPrice'
+      responses:
+        '200':
+          description: 'Прайс на покупку ходов'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+  /game/shots/by:
+    post:
+      tags:
+        - 'Покупка ходов'
+      summary: 'Купить ходы'
+      description: 'Покупка ходов'
+      operationId: 'App\Controller\Game\ShotsController::byShots'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - count
+              properties:
+                count:
+                  description: 'Количество покупаемых ходов'
+                  type: integer
+              type: object
+      responses:
+        '500':
+          description: 'Ошибка при покупке, данные не сохранены'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackendError'
+        '400':
+          description: 'Ошибка покупки'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '200':
+          description: 'Успешная покупка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ByShotsSuccessResponse'
+  /register:
+    post:
+      tags:
+        - 'Авторизация / Регистрация'
+      summary: 'Регистрация нового пользователя'
+      description: 'Регистрация пользователя'
+      operationId: 'App\Controller\RegistrationController::register'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - birthdate
+                - phone
+              properties:
+                birthdate:
+                  description: 'Дата рождения, формат dd-mm-YYYY'
                   type: string
-                content:
-                  description: 'Контент (без html тегов)'
+                phone:
+                  description: 'Телефон, 10 символов'
                   type: string
               type: object
       responses:
@@ -135,62 +195,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: 'Ошибка при сохранении, данные не сохранены'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackendError'
         '200':
           description: 'Успешно сохранено. Ответа нет, код 200.'
-  /api/token/create:
-    get:
+  /auth:
+    post:
       tags:
-        - 'Гостевая книга'
-      summary: 'Получить токен доступа к апи'
-      description: 'Получить токен доступа к апи'
-      operationId: 'App\Controller\SecurityController::generateToken'
+        - 'Авторизация / Регистрация'
+      summary: 'Авторизация пользователя'
+      description: 'Авторизация по номеру телефона и дате рождения'
+      operationId: 'App\Controller\SecurityController::auth'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - phone
+                - birthdate
+              properties:
+                phone:
+                  description: phone
+                  type: string
+                birthdate:
+                  description: 'Дата рождения, формат DD-MM-YYYY (21-12-2020)'
+                  type: string
+              type: object
       responses:
+        '404':
+          description: 'Пользователь не найден'
         '200':
-          description: Токен
+          description: 'Успешный вход. Токен необходимо передавать в дальнейших запросах к апи в хэдере X-AUTH-TOKEN'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: 'Ошибка валидации'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
 components:
   schemas:
-    ReviewsResponse:
-      required:
-        - page
-        - limit
-        - total
-        - items
-      properties:
-        page:
-          description: 'Текущая страница'
-          type: integer
-        limit:
-          description: 'Лимит отзывов на страницу'
-          type: integer
-        total:
-          description: 'Общее количество отзывов'
-          type: integer
-        items:
-          description: Отзывы
-          type: array
-          items:
-            $ref: '#/components/schemas/Review'
-      type: object
-    ErrorResponse:
-      required:
-        - error
-      properties:
-        error:
-          description: 'Текст ошибки'
-          type: string
-      type: object
-    TokenResponse:
-      required:
-        - token
-      properties:
-        token:
-          description: 'Токен доступа'
-          type: string
-      type: object
     ValidationError:
       required:
         - error
@@ -209,31 +261,420 @@ components:
                 type: string
           type: object
       type: object
-    Review:
-      title: Отзыв
+    TokenResponse:
+      required:
+        - token
+      properties:
+        token:
+          description: 'Токен, который в дальнейшем нужно передавать в каждом запросе к апи.'
+          type: string
+      type: object
+    BackendError:
+      required:
+        - error
+        - message
+        - code
+      properties:
+        error:
+          type: boolean
+        message:
+          description: 'Текст ошибки'
+          type: string
+        code:
+          description: 'Код исключения'
+          type: integer
+      type: object
+    UserInfo:
       required:
         - id
-        - author
-        - datetime
-        - author
-        - content
-        - likes_count
-        - liked
+        - shots_available
+        - isDemo
+        - locations
+      properties:
+        id:
+          description: 'ID текущего пользователя'
+          type: integer
+        shots_available:
+          description: 'Количество доступных ходов'
+          type: integer
+        isDemo:
+          description: 'Флаг демо пользователя'
+          type: boolean
+        locations:
+          description: 'Массив с ошибками валидации'
+          properties:
+            LOCATION_ID:
+              description: 'ИД локации'
+              type: boolean
+          type: object
+      type: object
+    LocationInfo:
+      required:
+        - info
+        - shots
+        - completed
+      properties:
+        info:
+          description: 'Информация о локации'
+          properties:
+            index:
+              description: 'ID локации'
+              type: string
+            titles:
+              description: 'Название локации'
+              type: string
+            cells:
+              description: 'Количество клеток в локации'
+              type: string
+          type: object
+        shots:
+          description: 'Массив с ходами и результатами в локации'
+          type: array
+          items:
+            $ref: '#/components/schemas/Shot'
+        completed:
+          description: 'Флаг пройденности локации'
+          type: boolean
+      type: object
+    ShotResponseSuccess:
+      required:
+        - success
+        - result
+        - shots
+      properties:
+        success:
+          description: 'Статус успешности (true)'
+          type: boolean
+        result:
+          $ref: '#/components/schemas/Prize'
+        shots:
+          description: 'Информация по ходам пользователя'
+          properties:
+            used:
+              description: 'Количество использованных ходов'
+              type: string
+            available:
+              description: 'Количество доступных ходов'
+              type: string
+          type: object
+      type: object
+    ShotResponseError:
+      required:
+        - success
+        - errors
+      properties:
+        success:
+          description: 'Статус успешности (false)'
+          type: boolean
+        errors:
+          type: array
+          items:
+            properties:
+              field:
+                description: 'Тип ошибки (cell / shots)'
+                type: string
+              message:
+                description: 'Текст ошибки (Клетка уже открыта. / Недостаточное количество ходов.)'
+                type: string
+            type: object
+      type: object
+    PriceResponse:
+      required:
+        - price
+      properties:
+        price:
+          description: 'Цена в бонусах за 1 ход'
+          type: integer
+      type: object
+    ByShotsResponse:
+      required:
+        - success
+      properties:
+        success:
+          description: 'Статус успешности (false)'
+          type: boolean
+      type: object
+    ByShotsSuccessResponse:
+      required:
+        - success
+        - current_shots_count
+      properties:
+        success:
+          description: 'Статус успешности (true)'
+          type: boolean
+        current_shots_count:
+          description: 'Текущее количество доступных ходов (после покупки)'
+          type: integer
+      type: object
+    Shot:
+      title: 'Ход игрока'
+      required:
+        - id
+        - allIndex
+        - userIndex
+        - location
+        - cell
+        - date
+        - result
       properties:
         id:
           description: ID
           type: integer
-        author:
-          description: Автор
+        allIndex:
+          description: 'Сквозной номер хода'
+          type: integer
+        userIndex:
+          description: 'Номер хода по счетчику игрока'
+          type: integer
+        location:
+          description: 'Ид локации, в которой совершен ход'
+          type: integer
+        cell:
+          description: 'Номер клетки'
+          type: integer
+        date:
+          description: 'Дата и время хода'
           type: string
-        datetime:
-          description: 'Дата и время написания отзыва, формат "ISO 8601"'
+        result:
+          description: 'Результат хода'
+          type: array
+          items:
+            $ref: '#/components/schemas/Prize'
+      type: object
+    Prize:
+      title: Приз
+      required:
+        - title
+        - type
+        - prize_group
+      properties:
+        id:
+          description: ID
+          type: integer
+        title:
+          description: Название
+          type: string
+        isWon:
+          description: 'Выиграл ли текущий юзер этот приз'
+          type: boolean
+        type:
+          $ref: '#/components/schemas/PrizeType'
+        prize_group:
+          $ref: '#/components/schemas/PrizeGroup'
+      type: object
+    PrizeGroup:
+      title: 'Группы призов'
+      required:
+        - name
+        - title
+      properties:
+        id:
+          description: ID
+          type: integer
+        title:
+          description: Название
+          type: string
+        name:
+          description: 'Внутреннее наименование'
+          type: string
+      type: object
+    PrizeType:
+      title: 'Типы призов'
+      required:
+        - name
+        - title
+      properties:
+        id:
+          description: ID
+          type: integer
+        title:
+          description: Название
+          type: string
+        name:
+          description: 'Внутреннее наименование'
+          type: string
+      type: object
+    Task:
+      title: Задание
+      required:
+        - title
+        - openTopic
+        - openMessage
+        - closeTopic
+        - closeMessage
+        - prize
+        - position
+      properties:
+        id:
+          description: ID
+          type: integer
+        title:
+          description: 'Краткое название'
+          type: string
+        openTopic:
+          description: 'Полный заголовок'
+          type: string
+        openMessage:
+          description: Описание
+          type: string
+        closeTopic:
+          description: 'Заголовок при закрытии'
+          type: string
+        closeMessage:
+          description: 'Описание при закрытии'
+          type: string
+        position:
+          description: Сортировка
+          type: integer
+        prize:
+          description: 'Приз за выполнение (id)'
+          type: integer
+        image:
+          description: Изображение
+          properties:
+            name:
+              description: 'название файла'
+              type: string
+            path:
+              description: 'путь до файла'
+              type: string
+          type: object
+      type: object
+    User:
+      title: Пользователь
+      required:
+        - email
+        - title
+        - account
+        - attempts
+        - blockDate
+        - isRegistered
+        - isEnabled
+        - roles
+      properties:
+        id:
+          description: ID
+          type: integer
+        email:
+          description: Email
+          type: string
+        roles:
+          description: 'Массив с названием ролей'
+          type: array
+          items:
+            type: string
+        password:
+          description: 'Пароль (захэшированный)'
+          type: string
+        title:
+          description: Название
+          type: string
+        accessCode:
+          description: 'Код доступа'
+          type: string
+        attempts:
+          description: 'Попытки входа'
+          type: integer
+        blockDate:
+          description: 'Дата блокировки'
           type: string
           format: date-time
-        content:
-          description: 'Текст отзыва'
-          type: string
-        likes_count:
-          description: 'Количество лайков'
+        isRegistered:
+          description: 'Полностью зарегистрирован'
+          type: boolean
+        isEnabled:
+          description: Доступность
+          type: boolean
+        account:
+          description: 'Аккаунт (сущность Account)'
           type: integer
+        shots_available:
+          description: 'Количество доступных ходов'
+          type: integer
+        shots_used:
+          description: 'Количество использованных ходов'
+          type: integer
+      type: object
+    UserDataLog:
+      title: 'Аккаунтский лог'
+      required:
+        - id
+        - dateCreated
+        - type
+        - user
+        - userIp
+        - oldData
+        - newData
+      properties:
+        id:
+          description: ID
+          type: integer
+        dateCreated:
+          description: 'Дата и время события'
+          type: string
+          format: date-time
+        type:
+          description: Тип
+          type: string
+          enum:
+            - created
+            - updated
+        userIp:
+          description: 'IP пользователя'
+          type: string
+        oldData:
+          description: 'Изначальные данные'
+          type: array
+          items:
+            description: 'любой формат json'
+        newData:
+          description: 'Новые данные'
+          type: array
+          items:
+            description: 'любой формат json'
+      type: object
+    UserTask:
+      title: 'Пользовательские задания'
+      required:
+        - id
+        - task
+        - account
+        - dateCreated
+        - dateStart
+        - dateFinish
+        - newData
+        - isViewed
+        - isCompleted
+      properties:
+        id:
+          description: ID
+          type: integer
+        task:
+          description: 'Задание (сущность Task)'
+          type: integer
+        account:
+          description: 'Аккаунт (сущность Account)'
+          type: integer
+        dateCreated:
+          description: 'Дата и время создания'
+          type: string
+          format: date-time
+        dateCompleted:
+          description: 'Дата и время выполнения'
+          type: string
+          format: date-time
+        dateStart:
+          description: 'Дата начала задания'
+          type: string
+          format: date-time
+        dateFinish:
+          description: 'Дата окончания задания'
+          type: string
+          format: date-time
+        isViewed:
+          description: Просмотрено
+          type: boolean
+        isCompleted:
+          description: Выполнено
+          type: boolean
       type: object
